@@ -78,8 +78,8 @@ In `api/managed-records.js`, write a function named `retrieve` that requests dat
 
 ## Setup
 
-**Requirements:** NodeJS >= 14.0.0, and [yarn >=1.22.0](https://yarnpkg.com/en/docs/install)
+**Requirements:** NodeJS >= 14.0.0, and clone this repository
 
-`yarn install` to install.
+`npm install` to install... all packages both in the root folder and in the records folder
 
-`yarn test` to run the provided unit tests.
+`npm run test` in the root folder to run the provided unit tests.
