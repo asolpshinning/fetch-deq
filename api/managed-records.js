@@ -13,8 +13,7 @@ const retrieve = async (options = {}) => {
     const { page = 1, colors = [] } = options;
     const limit = 10;
     const offset = (page - 1) * limit;
-    const colorQuery = colors.length > 0 ? colors.map(color => `color[]=${color}`).join('&') : '';
-    const url = path + `?limit=${limit}&offset=${offset}&${colorQuery}`;
+    const url = URI(path).search({ limit, offset, 'color[]': colors })
     const response = await fetch(url);
     const data = await response.json();
     const ids = data.map(item => item.id);
@@ -27,7 +26,14 @@ const retrieve = async (options = {}) => {
             && ['red', 'blue', 'yellow'].includes(item.color)
     ).length;
     const previousPage = page > 1 ? page - 1 : null;
-    const nextPage = data.length < limit || page >= 50 ? null : page + 1;
+    //const nextPage = data.length < limit || page >= 50 ? null : page + 1;
+    const checkIfNextPage = async () => {
+        if (data.length === 0) return null;
+        let res = await fetch(path + `?limit=1&offset=${offset + 10}`);
+        res = await res.json();
+        return res.length > 0;
+    }
+    const nextPage = await checkIfNextPage() ? page + 1 : null;
     return { ids, open, closedPrimaryCount, previousPage, nextPage };
 };
 export default retrieve;
