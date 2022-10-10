@@ -26,9 +26,11 @@ const retrieve = async (options = {}) => {
             && ['red', 'blue', 'yellow'].includes(item.color)
     ).length;
     const previousPage = page > 1 ? page - 1 : null;
-    //const nextPage = data.length < limit || page >= 50 ? null : page + 1;
     const checkIfNextPage = async () => {
-        if (data.length === 0) return null;
+        if (data.length === 0) {
+            console.log('no next page because there is no data retrieved')
+            return null;
+        }
         let res = await fetch(path + `?limit=1&offset=${offset + 10}`);
         res = await res.json();
         return res.length > 0;
